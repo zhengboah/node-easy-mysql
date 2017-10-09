@@ -2,6 +2,7 @@ const _ = require('underscore')
 const co = require('co')
 const mysql = require('mysql')
 const Q = require('q')
+const debug = require('debug')('node-easy-mysql')
 const assert = require('assert')
 
 let pool = null
@@ -9,7 +10,7 @@ let pool = null
 class DB {
   constructor (options) {
     if (!pool) {
-      console.log("pool created")
+      debug("pool created")
       this.dbConfig = _.extend({
         type: 'mysql',
         host: 'localhost',
@@ -60,7 +61,7 @@ class DB {
       self.trans_connection.release()
       self.trans_connection = null
     }).catch((err) => {
-      console.log("commit error", err)
+      self.log(`commit error: ${err}`)
       return self.rollback()
     })
   }
@@ -143,12 +144,12 @@ class DB {
     const self = this
     return co(function * (){
       let connection
-      if (self.trans_connection) { //事务
+      if (self.trans_connection) { //transaction
         connection = self.trans_connection
       } else {
         connection = yield Q.ninvoke(self.pool,'getConnection')
       }
-      console.log(mysql.format(query, data))
+      self.log(mysql.format(query, data))
       let result = yield Q.ninvoke(connection, 'query', query, data)
       if (!self.trans_connection) connection.release() 
       self.reset()
@@ -246,6 +247,14 @@ class DB {
     return [whereSql, datas]
   }
   
+  log (info) {
+    info = `node-easy-mysql >> ${info}`
+    if (!this.dbConfig.log) {
+      console.log(info)
+    } else {
+      this.dbConfig.log(info)
+    }
+  }
 
 }
 

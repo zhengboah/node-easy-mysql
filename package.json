@@ -1,0 +1,17 @@
+{
+  "name": "node-easy-mysql",
+  "version": "0.0.2",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bo Zheng <zhengboah@163.com>",
+  "license": "ISC",
+  "dependencies": {
+    "co": "^4.6.0",
+    "mysql": "^2.14.1",
+    "q": "^1.5.0",
+    "underscore": "^1.8.3"
+  }
+}

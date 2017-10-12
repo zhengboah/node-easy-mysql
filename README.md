@@ -29,20 +29,13 @@ co(function * () {
   })
 
   // modify account
-  yield dbInstance.update('account', {
-    pwd: "dsfsdfsdfs",
-  }, {
-    email: 'test@111.com'
-  })
+  yield dbInstance.table('account').where({account: 'ttteeet@jjjj3.com', status: 2}).update({name: 'dddddd', group_id: 33, permission: 111})
 
   // delete account
-  yield dbInstance.delete('account', {
-    email: "test@111.com"
-  })
-
+  yield dbInstance.table('account').where({account: 'test@111.com'}).delete()
 
   yield dbInstance.table('account').field(['a.email', ['b.org_id', 'dddd']]).alias('a').join('left join zy_account_group b on a.group_id=b.id').limit(1).select()
-  yield dbInstance.table('account').where({account: 'ttteeet@jjjj3.com', status: 2}).update({name: 'dddddd', group_id: 33, permission: 111})
+
 
   yield dbInstance.table('account').where({permission: 111}).find()
 

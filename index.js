@@ -228,7 +228,7 @@ class DB {
   delete (where = {}) {
     this.$where = _.extend(this.$where, where)
     assert(!_.isEmpty(this.$where), "where must not be empty")
-    let parseWhere = this.parseWhere(where)
+    let parseWhere = this.parseWhere(this.$where)
     let query = `DELETE FROM \`${this.$table}\` where ${parseWhere[0]}`
     return this.query(query, parseWhere[1])
   }

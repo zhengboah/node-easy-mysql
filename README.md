@@ -12,7 +12,7 @@ npm install node-easy-mysql
 const Db = require('node-easy-mysql')
 const co = require('co')
 
-let dbInstance = new Db({
+const dbInstance = new Db({
   host:   'localhost', 
   user:   'root',
   password: 'root',

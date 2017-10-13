@@ -10,7 +10,6 @@ let pool = null
 class DB {
   constructor (options) {
     if (!pool) {
-      debug("pool created")
       this.dbConfig = _.extend({
         type: 'mysql',
         host: 'localhost',
@@ -28,6 +27,7 @@ class DB {
         password: this.dbConfig.password,
         database: this.dbConfig.database
       })
+      debug("pool created")
     } else {
       this.pool = pool
     }
@@ -45,6 +45,7 @@ class DB {
       if (self.trans_connection) {
         return Promise.reject({msg: 'cannot start trans twice!'})
       }
+      debug("Transaction start: ")
       let connection = yield Q.ninvoke(self.pool,'getConnection')
       self.trans_connection = connection
       yield Q.invoke(connection, 'beginTransaction')
@@ -57,6 +58,7 @@ class DB {
       if (!self.trans_connection) {
         return Promise.reject({msg: 'No transaction now!'})
       }
+      debug("Transaction commit")
       yield Q.ninvoke(self.trans_connection, 'commit')
       self.trans_connection.release()
       self.trans_connection = null
@@ -72,6 +74,7 @@ class DB {
       if (!self.trans_connection) {
         return Promise.reject({msg: 'No transaction now!'})
       }
+      debug("Transaction rollback")
       yield Q.ninvoke(self.trans_connection, 'rollback')
       self.trans_connection.release()
       self.trans_connection = null
@@ -163,8 +166,15 @@ class DB {
   }
 
   find () {
-    this.$limit = "LIMIT 1"
-    return this.select()
+    const self = this
+    return co(function * () {
+      self.$limit = "LIMIT 1"
+      let result =  yield self.select()
+      if (_.isArray(result) && result.length) {
+        return result[0]
+      }
+      return null
+    })
   }
 
   select () {

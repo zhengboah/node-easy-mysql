@@ -1,6 +1,6 @@
 {
   "name": "node-easy-mysql",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {

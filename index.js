@@ -200,6 +200,71 @@ class DB {
     return this.query(sql, datas)
   }
 
+  max (field) {
+    const self = this
+    return co(function * () {
+      let fieldName = '_field'
+      self.$field = `MAX(${mysql.escapeId(field)}) as ${fieldName}`
+      let result = yield self.select()
+      if (!result.length) {
+        return null
+      }
+      return result[0][fieldName]
+    })
+  }
+
+  min (field) {
+    const self = this
+    return co(function * () {
+      let fieldName = '_field'
+      self.$field = `MIN(${mysql.escapeId(field)}) as ${fieldName}`
+      let result = yield self.select()
+      if (!result.length) {
+        return null
+      }
+      return result[0][fieldName]
+    })
+  }
+
+  count (field) {
+    const self = this
+    return co(function * () {
+      let fieldName = '_field'
+      self.$field = `COUNT(${mysql.escapeId(field)}) as ${fieldName}`
+      let result = yield self.select()
+      if (!result.length) {
+        return null
+      }
+      return result[0][fieldName]
+    })
+  }
+
+  sum (field) {
+    const self = this
+    return co(function * () {
+      let fieldName = '_field'
+      self.$field = `SUM(${mysql.escapeId(field)}) as ${fieldName}`
+      let result = yield self.select()
+      if (!result.length) {
+        return null
+      }
+      return result[0][fieldName]
+    })
+  }
+
+  avg (field) {
+    const self = this
+    return co(function * () {
+      let fieldName = '_field'
+      self.$field = `AVG(${mysql.escapeId(field)}) as ${fieldName}`
+      let result = yield self.select()
+      if (!result.length) {
+        return null
+      }
+      return result[0][fieldName]
+    })
+  }
+
   insert (data) {
     let column = []
     let columnDatas = []

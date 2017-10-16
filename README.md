@@ -39,6 +39,13 @@ co(function * () {
 
   yield dbInstance.table('account').where({permission: 111}).find()
 
+
+  result = yield dbInstance.table('account').where({pwd: '222222'}).sum('id')
+  result = yield dbInstance.table('account').where({pwd: '222222'}).min('id')
+  result = yield dbInstance.table('account').where({pwd: '222222'}).max('id')
+  result = yield dbInstance.table('account').where({pwd: '222222'}).avg('id')
+  result = yield dbInstance.table('account').where({pwd: '222222'}).count('id')
+
   // transaction mode
   yield dbInstance.startTrans()
   yield dbInstance.table('account1').add({account:'33333', pwd: '22222222222'})

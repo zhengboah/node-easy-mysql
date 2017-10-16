@@ -1,6 +1,6 @@
 {
   "name": "node-easy-mysql",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -22,5 +22,8 @@
   "devDependencies": {
     "mocha": "^4.0.1"
   },
-  "keywords": ["nodejs", "mysql"]
+  "keywords": [
+    "nodejs",
+    "mysql"
+  ]
 }

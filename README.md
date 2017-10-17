@@ -18,18 +18,7 @@ const dbInstance = new Db({
   password: 'root',
   database: 'mydb'
 })
-<<<<<<< 4fff394cd6b674d8a71ffc93e577f3f4f91b5bee
 
-## API
-* [select](#select)
-* insert
-* update
-* delete
-* sum
-* count
-* 
-=======
->>>>>>> readme
 co(function * () {
   let result = yield dbInstance.table('account').field(['a.email', ['b.org_id', 'dddd']]).alias('a').join('left join zy_account_group b on a.group_id=b.id').limit(1).select()
   console.log(result)
@@ -80,14 +69,7 @@ co(function * () {
 ### delete
 ```
   yield dbInstance.table('account').where({account: 'test@111.com'}).delete()
-<<<<<<< 4fff394cd6b674d8a71ffc93e577f3f4f91b5bee
-  <a name="select"/>
-  yield dbInstance.table('account').field(['a.email', ['b.org_id', 'dddd']]).alias('a').join('left join zy_account_group b on a.group_id=b.id').limit(1).select()
-=======
 ```  
-
->>>>>>> readme
-
 
 <a name="find"/>
 

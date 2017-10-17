@@ -19,6 +19,14 @@ const dbInstance = new Db({
   database: 'mydb'
 })
 
+## API
+* [select](#select)
+* insert
+* update
+* delete
+* sum
+* count
+* 
 co(function * () {
   // add account
  yield dbInstance.table('account').insert({
@@ -33,7 +41,7 @@ co(function * () {
 
   // delete account
   yield dbInstance.table('account').where({account: 'test@111.com'}).delete()
-
+  <a name="select"/>
   yield dbInstance.table('account').field(['a.email', ['b.org_id', 'dddd']]).alias('a').join('left join zy_account_group b on a.group_id=b.id').limit(1).select()
 
 

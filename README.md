@@ -114,6 +114,9 @@ co(function * () {
 <a name="fetchSql"/>
 
 ### fetchSql
+
+This method just output the sql, not execute the sql.
+
 ```
 yield dbInstance.table('account').fetchSql(true).field(['a.email', ['b.org_id', 'dddd']]).alias('a').join('left join group b on a.group_id=b.id').limit(1).select()
 // 'SELECT `a`.`email`,`b`.`org_id` as dddd FROM `zy_account` a left join zy_account_group b on a.group_id=b.id LIMIT 0,1'

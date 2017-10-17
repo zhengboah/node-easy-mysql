@@ -89,6 +89,7 @@ class DB {
     this.$field = null
     this.$table = ""
     this.$alias = null
+    this.$isSql = false
   }
 
   table (table) {
@@ -145,6 +146,13 @@ class DB {
 
   query (query, data = []) {
     const self = this
+    let isSql = self.$isSql
+    self.reset()
+    if (isSql) {
+      let formatSql = mysql.format(query, data)
+      return Promise.resolve(formatSql)
+    }
+
     return co(function * (){
       let connection
       if (self.trans_connection) { //transaction
@@ -155,9 +163,15 @@ class DB {
       self.log(mysql.format(query, data))
       let result = yield Q.ninvoke(connection, 'query', query, data)
       if (!self.trans_connection) connection.release() 
-      self.reset()
       return result[0]
     })
+  }
+
+  fetchSql (isSql) {
+    if (isSql) {
+      this.$isSql = true
+    }
+    return this
   }
 
   join (joinSql = "") {
@@ -168,8 +182,13 @@ class DB {
   find () {
     const self = this
     return co(function * () {
+      let result
+      let isSql = self.$isSql
       self.$limit = "LIMIT 1"
-      let result =  yield self.select()
+      result =  yield self.select()
+      if (isSql) {
+        return result
+      }
       if (_.isArray(result) && result.length) {
         return result[0]
       }
@@ -203,9 +222,14 @@ class DB {
   max (field) {
     const self = this
     return co(function * () {
+      let result
+      let isSql = self.$isSql
       let fieldName = '_field'
       self.$field = `MAX(${mysql.escapeId(field)}) as ${fieldName}`
-      let result = yield self.select()
+      result = yield self.select()
+      if (isSql) {
+        return result
+      }
       if (!result.length) {
         return null
       }
@@ -216,9 +240,14 @@ class DB {
   min (field) {
     const self = this
     return co(function * () {
+      let result
+      let isSql = self.$isSql
       let fieldName = '_field'
       self.$field = `MIN(${mysql.escapeId(field)}) as ${fieldName}`
-      let result = yield self.select()
+      result = yield self.select()
+      if (isSql) {
+        return result
+      }
       if (!result.length) {
         return null
       }
@@ -229,9 +258,14 @@ class DB {
   count (field) {
     const self = this
     return co(function * () {
+      let result
+      let isSql = self.$isSql
       let fieldName = '_field'
       self.$field = `COUNT(${mysql.escapeId(field)}) as ${fieldName}`
-      let result = yield self.select()
+      result = yield self.select()
+      if (isSql) {
+        return result
+      }
       if (!result.length) {
         return null
       }
@@ -242,9 +276,14 @@ class DB {
   sum (field) {
     const self = this
     return co(function * () {
+      let result
+      let isSql = self.$isSql
       let fieldName = '_field'
       self.$field = `SUM(${mysql.escapeId(field)}) as ${fieldName}`
-      let result = yield self.select()
+      result = yield self.select()
+      if (isSql) {
+        return result
+      }
       if (!result.length) {
         return null
       }
@@ -255,9 +294,14 @@ class DB {
   avg (field) {
     const self = this
     return co(function * () {
+      let result
+      let isSql = self.$isSql
       let fieldName = '_field'
       self.$field = `AVG(${mysql.escapeId(field)}) as ${fieldName}`
-      let result = yield self.select()
+      result = yield self.select()
+      if (isSql) {
+        return result
+      }
       if (!result.length) {
         return null
       }

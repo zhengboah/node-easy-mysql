@@ -37,6 +37,8 @@ co(function * () {
 * [avg](#avg)
 * [max](#max)
 * [min](#min)
+* [fetchSql](#fetchSql)
+* [transaction](#transaction)
 
 <a name="select"/>
 
@@ -109,6 +111,13 @@ co(function * () {
 ```  
   result = yield dbInstance.table('account').where({pwd: '222222'}).count('id')
 ```
+<a name="fetchSql"/>
+
+```
+yield dbInstance.table('account').fetchSql(true).field(['a.email', ['b.org_id', 'dddd']]).alias('a').join('left join group b on a.group_id=b.id').limit(1).select()
+// 'SELECT `a`.`email`,`b`.`org_id` as dddd FROM `zy_account` a left join zy_account_group b on a.group_id=b.id LIMIT 0,1'
+```
+
 <a name="transaction"/>
 
 ### transaction
